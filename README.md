@@ -14,7 +14,7 @@ python setup.py install
 ```
 
 ### Quick start
-
+```
 import xchrom as xc
 
 data_path = xc.get_data_dir()
@@ -32,3 +32,8 @@ xc.pl.plot_train_history(
     savefig = True,
     out_file = './data/quick_start/train_out/train_history_plot.pdf'
     )
+```
+
+### Tutorials
+see: 
+```https://xchrom.readthedocs.io/en/latest/Tutorials/index.html```
