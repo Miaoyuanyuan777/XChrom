@@ -1,10 +1,12 @@
 # XChrom
 
 ### Installation
-wget git@github.com:Miaoyuanyuan777/XChrom.git
 ```bash
 conda create -n XChrom python=3.8
 conda activate XChrom
+
+conda install git
+git clone git@github.com:Miaoyuanyuan777/XChrom.git
 ```
 
 ```
