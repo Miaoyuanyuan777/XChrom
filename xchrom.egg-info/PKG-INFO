@@ -9,15 +9,15 @@ Requires-Dist: anndata==0.9.2
 Requires-Dist: biopython==1.79
 Requires-Dist: h5py==3.1.0
 Requires-Dist: matplotlib==3.5.1
-Requires-Dist: numpy==1.19.2
+Requires-Dist: numpy
 Requires-Dist: pandas==1.4.1
 Requires-Dist: pysam==0.9.1
 Requires-Dist: rpy2==3.5.17
 Requires-Dist: scanpy==1.9.5
 Requires-Dist: scikit-learn==1.0.2
 Requires-Dist: scipy==1.8.0
-Requires-Dist: setuptools==68.2.2
+Requires-Dist: setuptools
 Requires-Dist: tensorflow==2.6.0
-Requires-Dist: tqdm==4.66.1
+Requires-Dist: tqdm
 
 Cross-cell chromatin accessibility prediction
