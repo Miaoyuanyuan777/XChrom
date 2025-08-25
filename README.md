@@ -1,1 +1,34 @@
 # XChrom
+
+### Installation
+wget git@github.com:Miaoyuanyuan777/XChrom.git
+```bash
+conda create -n XChrom python=3.8
+conda activate XChrom
+```
+
+```
+cd XChrom/xchrom
+python setup.py build
+python setup.py install
+```
+
+### Quick start
+
+import xchrom as xc
+
+data_path = xc.get_data_dir()
+history = xc.tr.train_XChrom(
+    input_folder = f'{data_path}/train_data',
+    cell_embedding_ad = f'{data_path}/test_rna.h5ad',
+    cellembed_raw='X_pca',
+    out_path='./data/quick_start/train_out/',
+    epochs = 10,
+    verbose = 1
+)
+
+xc.pl.plot_train_history(
+    history = history['history'],
+    savefig = True,
+    out_file = './data/quick_start/train_out/train_history_plot.pdf'
+    )
