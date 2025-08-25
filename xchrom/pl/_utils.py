@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import anndata
 import scanpy as sc
+import logomaker
 from .._utils import setup_seed
 
 def plot_train_history(
@@ -102,7 +103,6 @@ def plot_logo(
         The title of the plot.
 
     """
-    import logomaker
     nn_logo = logomaker.Logo(m, ax=ax, baseline_width=0)  
     nn_logo.style_spines(visible=False)
     nn_logo.style_spines(spines=['left'], visible=True, bounds=[ymin, ymax])
