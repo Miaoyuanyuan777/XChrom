@@ -52,3 +52,7 @@ html_theme_options = {
     'logo_only': True,
     'style_nav_header_background': '#E6E6FA',
 }
+
+autodoc_mock_imports = [
+    "rpy2"
+]
