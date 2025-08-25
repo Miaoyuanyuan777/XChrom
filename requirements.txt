@@ -1,17 +1,19 @@
 anndata==0.9.2
-biopython==1.79    # 安装和导入的名称不同，导入是Bio
+biopython==1.79    
 ConfigArgParse==1.7
-h5py==3.1.0
 logomaker
 matplotlib==3.5.1
-numpy
 pandas==1.4.1
 pysam==0.23.3
 # rpy2==3.5.17
 scanpy==1.9.5
-scikit-learn==1.0.2  # 安装和导入的名称不同，导入是sklearn
+scikit-learn==1.0.2
 scipy==1.8.0
 setuptools
-tensorflow-gpu==2.6.0 
 tqdm
+tensorflow-gpu==2.6.0 
+protobuf==3.20.3
+numpy
+h5py==3.1.0
 typing_extensions==3.7.4.3
+keras==2.6.0
