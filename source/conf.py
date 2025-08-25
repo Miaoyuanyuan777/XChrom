@@ -54,5 +54,5 @@ html_theme_options = {
 }
 
 autodoc_mock_imports = [
-    "rpy2"
+    "rpy2","tensorflow"
 ]
