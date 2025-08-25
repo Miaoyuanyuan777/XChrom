@@ -39,7 +39,7 @@ html_static_path = ['_static']
 
 import sys
 import os
-sys.path.insert(0, os.path.abspath('../xchrom'))
+sys.path.insert(0, os.path.abspath('../../XChrom'))
 
 html_last_updated_fmt = '%Y-%m-%d'
 html_domain_indices = True
