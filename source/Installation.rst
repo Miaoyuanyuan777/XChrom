@@ -28,14 +28,14 @@ If you haven't installed conda yet, please download and install Miniconda or Ana
     conda install git
     
     # Clone the project
-    git clone git@github.com:Miaoyuanyuan777/XChrom.git
+    git clone https://github.com/Miaoyuanyuan777/XChrom.git
 
 
 **3. Install TensorFlow GPU Version**
 
 Two installation methods are available (conda method is recommended):
 
-(1) Install with conda (Recommended)
+-1- Install with conda (Recommended)
 
 ::
     
@@ -43,7 +43,7 @@ Two installation methods are available (conda method is recommended):
 
 
 
-(2) Install with pip
+-2- Install with pip
 
 ::
 
@@ -61,7 +61,7 @@ Two installation methods are available (conda method is recommended):
 After installation, run the following command to verify that TensorFlow can correctly recognize the GPU:
 
 ::
-    
+
     python -c "import tensorflow as tf; print(tf.__version__); print(tf.config.list_physical_devices('GPU'))"
 
 
