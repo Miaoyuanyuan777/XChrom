@@ -35,21 +35,25 @@ If you haven't installed conda yet, please download and install Miniconda or Ana
 
 Two installation methods are available (conda method is recommended):
 
-    **Method 1: Install with conda (Recommended)**
+(1) Install with conda (Recommended)
 
-    ::
-            conda install tensorflow-gpu=2.6.0 -c conda-forge
+::
+    
+    conda install tensorflow-gpu=2.6.0 -c conda-forge
 
 
-    **Method 2: Install with pip**
 
-    ::
-        pip install tensorflow-gpu==2.6.0
+(2) Install with pip
+
+::
+
+    pip install tensorflow-gpu==2.6.0
 
 
 **4. Install CUDA and cuDNN**
 
 ::
+
     # Install CUDA 11.2 and cuDNN 8.1
     conda install cudatoolkit=11.2 cudnn=8.1 -c conda-forge
 
@@ -57,6 +61,7 @@ Two installation methods are available (conda method is recommended):
 After installation, run the following command to verify that TensorFlow can correctly recognize the GPU:
 
 ::
+    
     python -c "import tensorflow as tf; print(tf.__version__); print(tf.config.list_physical_devices('GPU'))"
 
 
