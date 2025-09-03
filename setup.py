@@ -23,7 +23,7 @@ setup(
     packages=find_packages(),
     package_data={
         'xchrom': [
-            'data/*'
+            'data/*','data/train_data/*'
             ]
         },
     
