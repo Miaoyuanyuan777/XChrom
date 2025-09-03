@@ -5,13 +5,23 @@
 
 Welcome to XChrom's documentation!
 ==================================
+**XChrom** is a deep learning model designed to predict chromatin accessibility across different cell types. Specifically, the model employs a **convolutional neural network (CNN)** architecture to extract sequence-level features for accessibility prediction, while simultaneously incorporating **cell identity information** to achieve generalization at the single-cell level. As a result, the model takes two distinct inputs:  
+
+1. **One-hot encoded DNA sequences**, which provide the sequence information.  
+2. **Cell identity vectors**, derived from dimensionality reduction of paired scRNA-seq data.  
+
+Together, these inputs enable XChrom to predict whether a given sequence is accessible in specific cells. 
+
+
+.. image:: ./_static/XChrom_pipeline.png
+    :alt: Title figure
+    :width: 700px
+    :align: center
 
 .. toctree::
    :maxdepth: 1
    :caption: Overview
-   :hidden:
    
-   About XChrom
    Installation
    Quickstart
    Files and directories
@@ -19,14 +29,12 @@ Welcome to XChrom's documentation!
 .. toctree::
    :maxdepth: 2
    :caption: Tutorials
-   :hidden:
 
    Tutorials/index
 
 .. toctree::
    :maxdepth: 2
    :caption: API
-   :hidden:
 
    API  
 

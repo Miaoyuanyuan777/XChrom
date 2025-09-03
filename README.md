@@ -1,6 +1,6 @@
 # XChrom：Cross-cell chromatin accessibility prediction model
 
-<div align=left><img width = '200' height ='80' src ="XChrom_pipeline.png"/></div>
+<div align=left><img width = '700' height ='200' src ="XChrom_pipeline.png"/></div>
 
 ## Brief Introduction
 
