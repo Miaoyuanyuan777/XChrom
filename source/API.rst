@@ -2,12 +2,11 @@ API
 ~~~
 
 XChrom: Cross-cell chromatin accessibility prediction model.
-============================================================
 
 
-Import xchrom as::
+Import xchrom package ::
 
-   import xchrom as xc
+   import xchrom
 
 
 Reading
@@ -16,10 +15,6 @@ Reading
 .. autosummary::
    :toctree: _autosummary
 
-   xchrom.readfile.read_10x_mtx_to_adata
-   xchrom.readfile.read_rds_to_h5ad
-   xchrom.readfile.read_h5seurat_to_h5ad
-   xchrom.readfile.read_seurat_to_h5ad
    xchrom.readfile.read_10x_h5_to_h5ad
 
 
@@ -31,6 +26,7 @@ Preprocessing
 
    xchrom.pp.process_train_test_single
    xchrom.pp.process_test_dual
+   xchrom.pp.filter_multiome_data
 
 Model training
 ==============
@@ -52,6 +48,7 @@ Toolkit
    xchrom.tl.calc_auc_pr
    xchrom.tl.calc_nsls_score
    xchrom.tl.calc_pca
+   xchrom.tl.bed_to_fasta
    xchrom.tl.crosscell_aucprc
    xchrom.tl.crosscell_nsls
    xchrom.tl.crosspeak_aucprc

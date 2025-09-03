@@ -19,4 +19,5 @@ from ._utils import filter_multiome_data
 __all__ = [
     'process_train_test_single',
     'process_test_dual',
+    'filter_multiome_data'
 ]

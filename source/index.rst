@@ -27,7 +27,7 @@ Together, these inputs enable XChrom to predict whether a given sequence is acce
    Files and directories
    
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Tutorials
 
    Tutorials/index
