@@ -1,8 +1,8 @@
-# XChrom：Cross-cell chromatin accessibility prediction model
+# **XChrom：Cross-cell chromatin accessibility prediction model**
 
 <div align=left><img width = '800' height ='400' src ="XChrom_pipeline.png"/></div>
 
-## Brief Introduction
+## **Brief Introduction**
 
 **XChrom** is a deep learning model designed to predict chromatin accessibility across different cell types. Specifically, the model employs a **convolutional neural network (CNN)** architecture to extract sequence-level features for accessibility prediction, while simultaneously incorporating **cell identity information** to achieve generalization at the single-cell level. As a result, the model takes two distinct inputs:  
 
@@ -11,11 +11,11 @@
 
 Together, these inputs enable XChrom to predict whether a given sequence is accessible in specific cells.  
 
-## Tutorial
+## **Tutorial**
 
 https://xchrom.readthedocs.io/en/latest/
 
-## Installation
+## **Installation**
 
 XChrom is a deep learning project developed with TensorFlow 2.6.0 and Python 3.8, requiring GPU acceleration support. This documentation provides complete installation and configuration instructions.
 
@@ -85,7 +85,7 @@ pip install -r requirements.txt
 pip install .
 ```
 
-## Quick start
+## **Quick start**
 ```python
 import xchrom as xc
 
