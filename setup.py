@@ -18,9 +18,14 @@ setup(
     long_description=Path("README.md").read_text('utf-8'),
     long_description_content_type="text/markdown",
     url="https://github.com/Miaoyuanyuan777/XChrom",
-python_requires='>=3.8',
+    python_requires='==3.8',
     # 自动发现所有包
     packages=find_packages(),
+    package_data={
+        'xchrom': [
+            'data/*'
+            ]
+        },
     
     # 包含非Python文件（如数据文件）
     include_package_data=True,

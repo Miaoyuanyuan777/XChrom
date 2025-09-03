@@ -38,7 +38,7 @@ conda activate XChrom
 conda install git
 
 # Clone the project
-git clone git@github.com:Miaoyuanyuan777/XChrom.git
+git clone https://github.com/Miaoyuanyuan777/XChrom.git
 ```
 
 ### 3. Install TensorFlow GPU Version
