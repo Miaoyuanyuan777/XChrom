@@ -9,74 +9,75 @@ XChrom is a deep learning project developed with TensorFlow 2.6.0 and Python 3.8
 
 If you haven't installed conda yet, please download and install Miniconda or Anaconda first.
 
-### 1. Create and Activate Conda Environment
+**1. Create and Activate Conda Environment**
 
-```bash
-# Create a Python 3.8 environment named XChrom
-conda create -n XChrom python=3.8
+::
 
-# Activate the environment
-conda activate XChrom
-```
+    # Create a Python 3.8 environment named XChrom
+    conda create -n XChrom python=3.8
 
-### 2. Install Git and Clone the Project
+    # Activate the environment
+    conda activate XChrom
 
-```bash
-# Install Git
-conda install git
 
-# Clone the project
-git clone git@github.com:Miaoyuanyuan777/XChrom.git
-```
+**2. Install Git and Clone the Project**
 
-### 3. Install TensorFlow GPU Version
+::
+    
+    # Install Git
+    conda install git
+    
+    # Clone the project
+    git clone git@github.com:Miaoyuanyuan777/XChrom.git
+
+
+**3. Install TensorFlow GPU Version**
 
 Two installation methods are available (conda method is recommended):
 
-**Method 1: Install with conda (Recommended)**
+    **Method 1: Install with conda (Recommended)**
 
-```bash
-conda install tensorflow-gpu=2.6.0 -c conda-forge
-```
+    ::
+            conda install tensorflow-gpu=2.6.0 -c conda-forge
 
-**Method 2: Install with pip**
 
-```bash
-pip install tensorflow-gpu==2.6.0
-```
+    **Method 2: Install with pip**
 
-### 4. Install CUDA and cuDNN
+    ::
+        pip install tensorflow-gpu==2.6.0
 
-```bash
-# Install CUDA 11.2 and cuDNN 8.1
-conda install cudatoolkit=11.2 cudnn=8.1 -c conda-forge
-```
+
+**4. Install CUDA and cuDNN**
+
+::
+    # Install CUDA 11.2 and cuDNN 8.1
+    conda install cudatoolkit=11.2 cudnn=8.1 -c conda-forge
+
 
 After installation, run the following command to verify that TensorFlow can correctly recognize the GPU:
 
-```python
-python -c "import tensorflow as tf; print(tf.__version__); print(tf.config.list_physical_devices('GPU'))"
-```
+::
+    python -c "import tensorflow as tf; print(tf.__version__); print(tf.config.list_physical_devices('GPU'))"
+
 
 If the output shows TensorFlow version 2.6.0 and detects GPU devices, the installation was successful.
 
-### 5. Install Project Dependencies
+**5. Install Project Dependencies**
 
-```bash
-# Navigate to the project directory
-cd XChrom/
+::
 
-# Install all dependencies listed in requirements.txt
-pip install -r requirements.txt
+    cd XChrom/
 
-# Install XChrom
-pip install .
-```
+    # Install all dependencies listed in requirements.txt
+    pip install -r requirements.txt
+
+    # Install XChrom
+    pip install .
+
 
 
 Requirements of XChrom
 ----------------------
-
 
 ::
 
