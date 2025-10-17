@@ -3,8 +3,9 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to XChrom's documentation!
+XChrom：a cross-cell chromatin accessibility prediction model integrating genomic sequences and cellular context.
 ==================================
+
 **XChrom** is a multimodal deep learning framework for predicting chromatin accessibility from sequences across single cells. Specifically, XChrom employs a **convolutional neural network (CNN)** architecture to model DNA sequences, effectively capturing the regulatory information encoded in DNA, while simultaneously incorporating **cell identity information** represented as low-dimensional cell embeddings derived from scRNA-seq data to achieve generalization at the single-cell level. As a result, the model takes two distinct inputs:  
 
 1. **A sequence encoding module using CNNs**

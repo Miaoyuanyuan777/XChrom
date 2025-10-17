@@ -1,7 +1,7 @@
 API
 ~~~
 
-XChrom: Cross-cell chromatin accessibility prediction model.
+XChrom: a cross-cell chromatin accessibility prediction model integrating genomic sequences and cellular context.
 
 
 Import xchrom package ::
