@@ -35,7 +35,7 @@ If you haven't installed conda yet, please download and install Miniconda or Ana
 
 Two installation methods are available (conda method is recommended):
 
--1- Install with conda (Recommended)
+(1) Install with conda (Recommend)
 
 ::
     
@@ -43,7 +43,7 @@ Two installation methods are available (conda method is recommended):
 
 
 
--2- Install with pip
+(2) Install with pip
 
 ::
 
