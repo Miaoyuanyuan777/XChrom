@@ -33,9 +33,9 @@ If you haven't installed conda yet, please download and install Miniconda or Ana
 
 **3. Install TensorFlow GPU Version**
 
-Two installation methods are available (conda method is recommended):
+Two installation methods are available:
 
-(1) Install with conda (Recommend)
+(1) Install with conda
 
 ::
     

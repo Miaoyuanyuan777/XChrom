@@ -55,9 +55,10 @@ def plot_train_history(
         plt.xlabel('Epoch')
         plt.ylabel('Score')
         plt.legend()
-        plt.show()
         if savefig:
             plt.savefig(out_file, format='pdf', dpi=300)
+        plt.show()
+        
     else:
         plt.figure(figsize=(10, 6))
         plt.subplot(1,2,1)
@@ -74,9 +75,10 @@ def plot_train_history(
         plt.plot(val_pr, label='Validation PR')
         plt.title('Training/Validation PR and AUC')
         plt.legend()
-        plt.show()
         if savefig:
             plt.savefig(out_file, format='pdf', dpi=300)
+        plt.show()
+        
 
 def plot_logo(
     m:np.ndarray, 
@@ -182,8 +184,9 @@ def plot_perpeak_aucprc(
     plt.tick_params(axis='both', labelsize=f-4)
     plt.text(min(pr_values),max(log_cell_cnts)-0.5, f'R: {R_pr:.2f}', fontsize=f, color='red')
     plt.subplots_adjust(wspace=0.3, left=0.1, right=0.95, top=0.9, bottom=0.1)
-    plt.show()
     plt.savefig(out_file, format='pdf', dpi=300)
+    plt.show()
+    
     
 
 def plot_percell_aucprc(
@@ -254,8 +257,9 @@ def plot_percell_aucprc(
     plt.text(min(pr_values),max(log_peak_cnts)-1, f'R: {R_pr:.2f}', fontsize=f, color='red')
     plt.tick_params(axis='both', labelsize=f-4)
     plt.subplots_adjust(wspace=0.3, left=0.1, right=0.95, top=0.9, bottom=0.1)
-    plt.show()
     plt.savefig(out_file, format='pdf', dpi=300)
+    plt.show()
+    
     
 
 def plot_motif_activity(
@@ -317,7 +321,7 @@ def plot_motif_activity(
                cmap='coolwarm', vmin=-2, vmax=2, show=False)
     ax1.set_title(f'{motif_name}_activity')
     plt.subplots_adjust(left=0.05, right=0.95, top=0.9, bottom=0.1)
-    plt.show()
     if save_path:
         plt.savefig(save_path, format="pdf", bbox_inches="tight")
         print(f"Plot saved to: {save_path}")
+    plt.show()
