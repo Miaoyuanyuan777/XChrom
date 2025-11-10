@@ -1,2 +1,7 @@
 source/Tutorials/data/
+source/.ipynb_checkpoints
+source/Tutorials/.ipynb_checkpoints
+xchrom/pp/.ipynb_checkpoints
+xchrom/tl/.ipynb_checkpoints
+xchrom/tr/.ipynb_checkpoints
 build/

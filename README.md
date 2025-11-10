@@ -46,9 +46,9 @@ git clone https://github.com/Miaoyuanyuan777/XChrom.git
 
 ### 3. Install TensorFlow GPU Version
 
-Two installation methods are available (conda method is recommended):
+Two installation methods are available:
 
-**Method 1: Install with conda (recommend)**
+**Method 1: Install with conda**
 
 ```bash
 conda install tensorflow-gpu=2.6.0 -c conda-forge
