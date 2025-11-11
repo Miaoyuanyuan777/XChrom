@@ -7,6 +7,9 @@ import math
 from sklearn.metrics import roc_auc_score, average_precision_score
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
+import matplotlib as mpl
+if not hasattr(mpl.colormaps, "get_cmap") and hasattr(mpl.cm, "get_cmap"):
+    mpl.colormaps.get_cmap = mpl.cm.get_cmap
 import anndata
 import scanpy as sc
 from .._utils import setup_seed
@@ -58,7 +61,6 @@ def plot_train_history(
         if savefig:
             plt.savefig(out_file, format='pdf', dpi=300)
         plt.show()
-        
     else:
         plt.figure(figsize=(10, 6))
         plt.subplot(1,2,1)
