@@ -3,15 +3,15 @@
 XChrom model training script
 
 Run as a standalone script:
-    python XChrom_train.py --input_folder ./data/1_within_sample/train_data/ 
-    --cell_embedding_ad ./data/1_within_sample/m_brain_paired_rna.h5ad 
-    --cellembed_raw 'X_pca' 
-    --out_path ./data/1_within_sample/train_out/
-    --trackscore
-    --celltype 'pc32_leiden'
-    --epochs 1000
-    --save_freq 1000
-    --verbose 0  # silent mode, no progress bar
+CUDA_VISIBLE_DEVICES="0" python /mnt/netshare2/miaoyuanyuan/miniconda3/envs/XChrom/lib/python3.8/site-packages/xchrom/tr/train.py \
+    --input_folder  ./data/1_within_sample/train_data/  \
+    --cell_embedding_ad  ./data/1_within_sample/m_brain_paired_rna.h5ad \
+    --cellembed_raw  X_pca  \
+    --bottleneck  32 \
+    --out_path  ./data/1_within_sample/train_out/ \
+    --epochs  1000\
+    --save_freq  1000 \
+    --verbose  0 # silent mode, no progress bar
 
 Import as a module:
     >>> import xchrom as xc
@@ -40,8 +40,14 @@ from pathlib import Path
 from typing import Union, Dict, Any, Literal
 from scipy import stats
 import os
-from .._utils import setup_seed
-from ._utils import Generator, XChrom_model, Callback_TrackScore, Callback_SaveModel
+try:
+    from .._utils import setup_seed
+    from ._utils import Generator, XChrom_model, Callback_TrackScore, Callback_SaveModel
+except ImportError:
+    import sys
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
+    from xchrom._utils import setup_seed
+    from xchrom.tr._utils import Generator, XChrom_model, Callback_TrackScore, Callback_SaveModel
 
 # os.environ["CUDA_VISIBLE_DEVICES"]="3,2,1,0"  
 
@@ -220,7 +226,7 @@ def train_XChrom(
     )
     model.compile(
         optimizer=tf.keras.optimizers.Adam(
-            learning_rate=lr_schedule, beta_1=0.95, beta_2=0.9995
+            learning_rate=lr_schedule, beta_1=0.95, beta_2=0.9995, clipnorm=1.0
         ),
         loss='binary_crossentropy',
         metrics=[
@@ -247,13 +253,7 @@ def train_XChrom(
         )
     ]
     
-    # if trackscore:
-    #     if celltype not in rna_trainval.obs.columns:
-    #         raise ValueError(f"Cell type column '{celltype}' not found in RNA data, which is required when trackscore=True")
-    #     ad_trainval.obs[celltype] = rna_trainval.obs[celltype]
-    #     callbacks_list.append(
-    #         Callback_TrackScore(rna_trainval, ad_trainval, model, print_scores=print_scores, use_rep_rna=cellembed_raw, label=celltype,cell_input_key='zscore32_perpc')
-    #     )
+
     if trackscore:
         if celltype not in ad_trainval.obs.columns:
             if celltype not in rna_trainval.obs.columns:
@@ -275,8 +275,6 @@ def train_XChrom(
         epochs=epochs, 
         validation_data=val_ds, 
         callbacks=callbacks_list,
-        use_multiprocessing=True,
-        workers=4,
         verbose=verbose
     )
     

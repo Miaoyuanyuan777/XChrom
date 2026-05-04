@@ -232,15 +232,21 @@ def XChrom_model(
     x2 = tf.keras.layers.Dense(64, activation='relu')(x2)
     x2 = tf.keras.layers.Dense(cell_vec, activation='linear', name='final_cellembed')(x2)
 
-    b = tf.expand_dims(seq_depth, axis=-1)
+    # Depth bias branch: use Reshape to force a distinct tensor copy and avoid
+    # GPU memory aliasing with intermediate tensors from the large cell branch
+    b = tf.keras.layers.Reshape((n_cells, 1))(seq_depth)
     b = tf.keras.layers.Dense(1, activation='linear')(b)
-    b = tf.squeeze(b, axis=-1)  # (bsz,n_cells)
+    b = tf.keras.layers.Reshape((n_cells,))(b)
 
     multiplied = tf.matmul(x2, x1)
     multiplied = tf.squeeze(multiplied, axis=-1)  # (bsz, num_cells)
-
-    output = tf.keras.activations.sigmoid(multiplied + b)
-
+    logits = multiplied + b
+    # Guard against rare GPU NaN (can occur when large intermediate tensors
+    # share memory with b under TF2.6's BFC allocator)
+    logits = tf.where(tf.math.is_nan(logits), tf.zeros_like(logits), logits)
+    safe_logits = tf.clip_by_value(logits, -15.0, 15.0)
+    output = tf.keras.activations.sigmoid(safe_logits)
+    
     model = tf.keras.Model(inputs=(sequence, cell_input, seq_depth), outputs=output)
 
     if show_summary:

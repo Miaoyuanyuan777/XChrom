@@ -4,6 +4,15 @@
 ## if you want to generate test data for XChrom, when the train set and test set are from single dataset, process_train_test_single will generate train and test inputs simultaneously,
 # and when the train set and test set are from different datasets, please use process_train_test_dual function to generate test inputs.
 
+"""
+Run as a standalone script:
+python /mnt/netshare2/miaoyuanyuan/miniconda3/envs/XChrom/lib/python3.8/site-packages/xchrom/pp/generate_input_data.py \
+    --ad_atac ./data/1_within_sample/m_brain_paired_atac.h5ad \
+    --input_fasta /mnt/netshare2/miaoyuanyuan/tutorials_tools/genome/hg38.fa \
+    --out_path ./data/1_within_sample/train_data/ \
+"""
+
+
 import os
 import h5py
 import anndata
@@ -12,7 +21,12 @@ import numpy as np
 import scipy.sparse as sparse
 from pathlib import Path
 from typing import Union
-from ._utils import split_test, make_h5_sparse
+try:
+    from ._utils import split_test, make_h5_sparse
+except ImportError:
+    import sys
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
+    from xchrom.pp._utils import split_test, make_h5_sparse
 
 def make_parser():
     parser = configargparse.ArgParser(
@@ -205,9 +219,9 @@ def main():
     parser = make_parser()
     args = parser.parse_args()
     if args.dual:
-        process_test_dual(args.ad_file, args.input_fasta, args.out_path)
+        process_test_dual(args.ad_atac, args.input_fasta, args.out_path)
     else:
-        process_train_test_single(args.ad_file, args.input_fasta, args.out_path)
+        process_train_test_single(args.ad_atac, args.input_fasta, args.out_path)
 
 if __name__ == "__main__":
     main()
