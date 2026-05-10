@@ -107,7 +107,8 @@ def crosscell_aucprc(
         m = m_crosscell
     )
     test_ds = crosscell_gen.create_dataset(shuffle=False)
-    model = XChrom_model(n_cells=atac_crosscell.shape[0],show_summary=False)
+    embed_dim = rna.obsm[cellembed_raw].shape[1]
+    model = XChrom_model(n_cells=atac_crosscell.shape[0],cell_vec = embed_dim,show_summary=False)
     model.load_weights(model_path)
 
     pred = model.predict(test_ds)
@@ -152,6 +153,7 @@ def crosscell_nsls(
     cell_embedding_ad:Union[str, Path, anndata.AnnData],
     input_folder:Union[str, Path] = './train_data',
     model_path:Union[str, Path] = './train_out/E1000best_model.h5',
+    cal_preddata:bool = True,
     output_path:Union[str, Path] = './eval_out',
     cellembed_raw:str = 'X_pca',
     celltype:str = 'celltype',
@@ -171,6 +173,8 @@ def crosscell_nsls(
         Must contain 'splits.h5', 'ad_crosscell.h5ad', 'm_crosscell.npz', 'trainval_seqs.h5'.
     model_path: str or Path
         Path to the trained model.
+    cal_preddata: bool
+        Whether to calculate the nsls score based on the predicted data. If False, calculate nsls score based on the raw atac data.
     output_path: str or Path
         Path to the output folder.
     cellembed_raw: str
@@ -218,8 +222,6 @@ def crosscell_nsls(
 
     if not input_folder.exists():
         raise FileNotFoundError(f"Data folder {input_folder} not found! Run XChrom_preprocess.py first.")
-    if not model_path.exists():
-        raise FileNotFoundError(f"Trained model path {model_path} not found! Run XChrom_train.py first.")
     if not cell_embedding_ad.exists():
         raise FileNotFoundError(f"Cell embedding adata path {cell_embedding_ad} not found! Please check the path.")
     os.makedirs(output_path, exist_ok=True)
@@ -240,20 +242,23 @@ def crosscell_nsls(
     ad0.obs['b_zscore'] = np.full(ad0.shape[0],1)
 
     ad = ad0[:,trainval_peakid] ## training peaks × cells
-
-    gen = Generator(
-        seq_path = input_folder/'all_seqs.h5',
-        adata = ad,
-        cell_input_key = 'zscore32_perpc'
-    )
-    ds = gen.create_dataset(shuffle=False)
-    model = XChrom_model(n_cells=ad.shape[0],show_summary=False)
-    model.load_weights(model_path)
-    pred = model.predict(ds)
-
     adp = ad.copy()
-    adp.X = pred.transpose(1,0)
-
+    if cal_preddata:
+        if not model_path.exists():
+            raise FileNotFoundError(f"Trained model path {model_path} not found! Run XChrom_train.py first.")
+        gen = Generator(
+            seq_path = input_folder/'all_seqs.h5',
+            adata = ad,
+            cell_input_key = 'zscore32_perpc'
+        )
+        ds = gen.create_dataset(shuffle=False)
+        embed_dim = rna.obsm[cellembed_raw].shape[1]
+        model = XChrom_model(n_cells=ad.shape[0],cell_vec=embed_dim,show_summary=False)
+        model.load_weights(model_path)
+        pred = model.predict(ds)
+        adp.X = pred.transpose(1,0)
+    else:
+        adp.X = ad.X.copy()
     ## XChrom impute 
     ad1 = adp.copy()
     ad1 = calc_pca(ad1)  ## return ['X_pca'] in ad1.obsm
@@ -370,7 +375,8 @@ def crosspeak_aucprc(
         m = m_crosspeak
     )
     test_ds = gen.create_dataset(shuffle=False)
-    model = XChrom_model(n_cells=ad_crosspeak.shape[0],show_summary=False)
+    embed_dim = rna.obsm[cellembed_raw].shape[1]
+    model = XChrom_model(n_cells=ad_crosspeak.shape[0], cell_vec=embed_dim, show_summary=False)
     model.load_weights(model_path)
     pred = model.predict(test_ds)
     print('predction shape:', pred.shape)
@@ -495,7 +501,8 @@ def crossboth_aucprc(
         m = m_crossboth
     )
     test_ds = gen.create_dataset(shuffle=False)
-    model = XChrom_model(n_cells=ad_crossboth.shape[0],show_summary=False)
+    embed_dim = rna.obsm[cellembed_raw].shape[1]
+    model = XChrom_model(n_cells=ad_crossboth.shape[0], cell_vec=embed_dim, show_summary=False)
     model.load_weights(model_path)
     pred = model.predict(test_ds)
     print('predction shape:', pred.shape)
@@ -539,6 +546,7 @@ def denoise_nsls(
     input_folder:Union[str, Path] = './train_data',
     output_path:Union[str, Path] = './eval_out',
     model_path:Union[str, Path] = './train_out/E1000best_model.h5',
+    cal_preddata:bool = True,
     cellembed_raw:str = 'X_pca',
     celltype:str = 'celltype',
     save_pred:bool = False,
@@ -558,6 +566,8 @@ def denoise_nsls(
         Path to the output folder.
     model_path: str or Path
         Path to the trained model.
+    cal_preddata:bool
+        Whether to calculate the nsls score based on the predicted data. If False, calculate nsls score based on the raw atac data.
     cellembed_raw: str
         Key of the raw cell input embedding in the cell embedding adata,to calculate RNA neighbors.
     save_pred: bool 
@@ -586,15 +596,12 @@ def denoise_nsls(
     else:
         raise ValueError(f"cell_embedding_ad must be a str, Path or anndata.AnnData!")
     input_folder = Path(input_folder)
-    model_path = Path(model_path)
     output_path = Path(output_path)
     cellembed_raw = str(cellembed_raw)
     celltype = str(celltype)
 
     if not input_folder.exists():
         raise FileNotFoundError(f"Data folder {input_folder} not found! Run XChrom_preprocess.py first.")
-    if not model_path.exists():
-        raise FileNotFoundError(f"Trained model path {model_path} not found! Run XChrom_train.py first.")
     if not cell_embedding_ad.exists():
         raise FileNotFoundError(f"Cell embedding adata path {cell_embedding_ad} not found! Please check the path.")
     os.makedirs(output_path, exist_ok=True)
@@ -609,21 +616,27 @@ def denoise_nsls(
     ad.obsm['zscore32_perpc'] = rna.obsm['zscore32_perpc']
     ad.obs[celltype]=rna.obs[celltype]
     ad.obs['b_zscore'] = np.full(ad.shape[0],1)
-
-    gen = Generator(
-        seq_path = input_folder/'all_seqs.h5',
-        adata = ad,
-        cell_input_key = 'zscore32_perpc'
-    )
-    ds = gen.create_dataset(shuffle=False)
-    model = XChrom_model(n_cells=ad.shape[0],show_summary=False)
-    model.load_weights(model_path)
-    pred = model.predict(ds)
-    print('Denoise done! denoise shape is:',pred.shape)
-
     adp = ad.copy()
-    adp.X = pred.transpose(1,0)
 
+    if cal_preddata:
+        model_path = Path(model_path)
+        if not model_path.exists():
+            raise FileNotFoundError(f"Trained model path {model_path} not found! Run XChrom_train.py first.")
+        gen = Generator(
+            seq_path = input_folder/'all_seqs.h5',
+            adata = ad,
+            cell_input_key = 'zscore32_perpc'
+        )
+        ds = gen.create_dataset(shuffle=False)
+        embed_dim = rna.obsm[cellembed_raw].shape[1]
+        model = XChrom_model(n_cells=ad.shape[0],cell_vec=embed_dim,show_summary=False)
+        model.load_weights(model_path)
+        pred = model.predict(ds)
+        print('Denoise done! denoise shape is:',pred.shape)
+        adp.X = pred.transpose(1,0)
+    else:
+        adp.X = ad.X.copy()
+    
     ## XChrom impute 
     ad1 = adp.copy()
     ad1 = calc_pca(ad1)
@@ -730,7 +743,8 @@ def crosssamples_aucprc(
         m = m,
     )
     ds = gen.create_dataset(shuffle=False)
-    model = XChrom_model(n_cells=ad.shape[0],show_summary=False)
+    embed_dim = rna.obsm[cellembed_raw].shape[1]
+    model = XChrom_model(n_cells=ad.shape[0], cell_vec=embed_dim, show_summary=False)
     model.load_weights(model_path)
     pred = model.predict(ds)
     print('Predict done! prediction shape is:',pred.shape)
@@ -853,7 +867,8 @@ def crosssamples_nsls(
         m = m,
     )
     ds = gen.create_dataset(shuffle=False)
-    model = XChrom_model(n_cells=ad.shape[0],show_summary=False)
+    embed_dim = rna.obsm[cellembed_raw].shape[1]
+    model = XChrom_model(n_cells=ad.shape[0], cell_vec=embed_dim, show_summary=False)
     model.load_weights(model_path)
     pred = model.predict(ds)
     print('Predict done! prediction shape is:',pred.shape)
