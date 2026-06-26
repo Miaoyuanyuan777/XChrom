@@ -278,7 +278,7 @@ def crosscell_nsls(
         sc.pl.umap(ad1, color=celltype, size=size_vector, alpha=alpha_vector, ax=ax, show=False)
         plt.savefig(output_path/'crosscell_umap.pdf', format='pdf', dpi=300)
     if save_pred:
-        ad1.write_h5ad(output_path/'crosscell_impute.h5ad')
+        adp.write_h5ad(output_path/'crosscell_impute.h5ad')
     return {
         'ns100': ns100,
         'ls100': ls100,
@@ -655,7 +655,7 @@ def denoise_nsls(
         sc.pl.umap(ad1, color=celltype, ax=ax, show=False)
         plt.savefig(output_path/'denoise_umap.pdf', format='pdf', dpi=300)
     if save_pred:
-        ad1.write_h5ad(output_path/'denoise_impute.h5ad')
+        adp.write_h5ad(output_path/'denoise_impute.h5ad')
     return {
         'ns100': ns100,
         'ls100': ls100,
