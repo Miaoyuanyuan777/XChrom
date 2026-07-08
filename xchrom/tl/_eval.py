@@ -891,7 +891,7 @@ def crosssamples_nsls(
         sc.pl.umap(ad1, color=celltype, ax=ax, show=False)
         plt.savefig(output_path/'crosssamples_umap.pdf', format='pdf', dpi=300)
     if save_pred:
-        ad1.write_h5ad(output_path/'crosssamples_impute.h5ad')
+        adp.write_h5ad(output_path/'crosssamples_impute.h5ad')
     return {
         'ns100': ns100,
         'ls100': ls100,
