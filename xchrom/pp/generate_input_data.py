@@ -69,7 +69,9 @@ def _save_basic_files(ad, output_path):
 def process_train_test_single(
     ad_atac: Union[str, Path, anndata.AnnData], 
     input_fasta: str, 
-    output_path: str = './train_data/'
+    output_path: str = './train_data/',
+    seed: int = 20,
+    ratio: fload = 0.9
     ):
     """
     Generate XChrom training and test inputs from a single dataset.
@@ -82,6 +84,10 @@ def process_train_test_single(
         genome fasta file path
     output_path : str or Path, optional
         output path, default is './train_data/'
+    seed: int, default is 20
+        random seed for reproducibility
+    ratio: float, default is 0.9
+        ratio of train set, the rest will be used for testing
         
     Returns
     -------
@@ -111,7 +117,7 @@ def process_train_test_single(
 
     # data split
     trainval_cell, test_cell, trainval_peak, test_peak = split_test(
-        np.arange(ad.shape[0]), np.arange(ad.shape[1]))
+        np.arange(ad.shape[0]), np.arange(ad.shape[1]),seed=seed,ratio=ratio)
     
     # save data split
     f = h5py.File(output_path /'splits.h5', "w")
