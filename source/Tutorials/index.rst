@@ -16,6 +16,6 @@ Major tutorials
 
     1. Within-sample analysis <1_Within-sample>
     2. Cross-sample analysis <2_Cross-samples>
-    - Pretrained-XChrom-new-scRNA <Pretrained-XChrom-new-scRNA>
+    - Pretrained XChrom <Pretrained-XChrom-new-scRNA>
     3. Cross-species analysis <3_Cross-species_calc_ISM>
     4. COVID-19 analysis <4_pred-newCondition_calc_TFactivity>
