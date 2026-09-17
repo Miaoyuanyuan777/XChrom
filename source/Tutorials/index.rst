@@ -14,19 +14,8 @@ Major tutorials
 .. toctree::
     :maxdepth: 2
 
-    1_Within-sample
-
-.. toctree::
-    :maxdepth: 2
-
-    2_Cross-samples
-
-.. toctree::
-    :maxdepth: 2
-
-    3_Cross-species_calc_ISM
-
-.. toctree::
-    :maxdepth: 2
-
-    4_pred-newCondition_calc_TFactivity
+    1. Within-sample analysis <1_Within-sample>
+    2. Cross-sample analysis <Cross-samples>
+    - Pretrained-XChrom-new-scRNA <Pretrained-XChrom-new-scRNA>
+    3. Cross-species analysis <3_Cross-species_calc_ISM>
+    4. COVID-19 analysis <4_pred-newCondition_calc_TFactivity>

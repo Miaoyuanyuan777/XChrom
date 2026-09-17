@@ -47,8 +47,9 @@ html_logo = '_static/XChrom_logo.png'
 html_favicon = '_static/XChrom_icon.svg'
 html_theme = 'sphinx_rtd_theme'
 html_theme_options = {
-    "navigation_depth": 1,
+    "navigation_depth": 2,
     "titles_only": True,
+    "collapse_navigation": False,
     'logo_only': True,
     'style_nav_header_background': '#E6E6FA',
 }
