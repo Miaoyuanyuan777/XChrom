@@ -71,7 +71,7 @@ def process_train_test_single(
     input_fasta: str, 
     output_path: str = './train_data/',
     seed: int = 20,
-    ratio: fload = 0.9
+    ratio: float = 0.9
     ):
     """
     Generate XChrom training and test inputs from a single dataset.
