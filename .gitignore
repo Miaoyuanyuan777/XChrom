@@ -1,3 +1,5 @@
+__pycache__/
+*.py[cod]
 source/Tutorials/data/
 source/.ipynb_checkpoints
 source/Tutorials/.ipynb_checkpoints
