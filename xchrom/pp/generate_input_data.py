@@ -84,10 +84,6 @@ def process_train_test_single(
         genome fasta file path
     output_path : str or Path, optional
         output path, default is './train_data/'
-    seed: int, default is 20
-        random seed for reproducibility
-    ratio: float, default is 0.9
-        ratio of train set, the rest will be used for testing
         
     Returns
     -------

@@ -114,10 +114,8 @@ def crosscell_aucprc(
     pred = model.predict(test_ds)
     print('predction shape:', pred.shape)
 
-    m_crosscell_to1 = m_crosscell.copy()  
-    m_crosscell_to1[m_crosscell_to1 != 0] = 1  # binaries
     test_prediction = pred.T
-    true_01matrix = m_crosscell_to1.T.toarray()
+    true_01matrix = (m_crosscell.T.toarray() > 0).astype(int)
 
     ## calculate auc and pr
     ## -1 Calculate overall auROC & auPRC 
@@ -262,15 +260,16 @@ def crosscell_nsls(
     ## XChrom impute 
     ad1 = adp.copy()
     ad1 = calc_pca(ad1)  ## return ['X_pca'] in ad1.obsm
-    ns100,ls100= calc_nsls_score(rna,ad1,100,celltype,test_cells =test_cellid,use_rep_rna = cellembed_raw,use_rep_atac='X_pca')
-    print(f'neighbor score(100)={ns100:.4f},label score(100)={ls100:.4f}')
-
-    ns50,ls50= calc_nsls_score(rna,ad1,50,celltype,test_cells =test_cellid,use_rep_rna = cellembed_raw,use_rep_atac='X_pca')
-    print(f'neighbor score(50)={ns50:.4f},label score(50)={ls50:.4f}')
-
+    
     ns10,ls10= calc_nsls_score(rna,ad1,10,celltype,test_cells =test_cellid,use_rep_rna = cellembed_raw,use_rep_atac='X_pca')
     print(f'neighbor score(10)={ns10:.4f},label score(10)={ls10:.4f}')
 
+    ns50,ls50= calc_nsls_score(rna,ad1,50,celltype,test_cells =test_cellid,use_rep_rna = cellembed_raw,use_rep_atac='X_pca')
+    print(f'neighbor score(50)={ns50:.4f},label score(50)={ls50:.4f}')
+    
+    ns100,ls100= calc_nsls_score(rna,ad1,100,celltype,test_cells =test_cellid,use_rep_rna = cellembed_raw,use_rep_atac='X_pca')
+    print(f'neighbor score(100)={ns100:.4f},label score(100)={ls100:.4f}')
+    
     if plot_umap:
         size_vector = [60 if idx in test_cellid else 10 for idx in range(ad1.n_obs)]
         alpha_vector = [1 if idx in test_cellid else 0.3 for idx in range(ad1.n_obs)]
@@ -380,10 +379,8 @@ def crosspeak_aucprc(
     model.load_weights(model_path)
     pred = model.predict(test_ds)
     print('predction shape:', pred.shape)
-    m_crosspeak_to1 = m_crosspeak.copy()  
-    m_crosspeak_to1[m_crosspeak_to1 != 0] = 1 
     test_prediction = pred.T
-    true_01matrix = m_crosspeak_to1.T.toarray()
+    true_01matrix = (m_crosspeak.T.toarray() > 0).astype(int)
     
     ## calculate auc and pr
     ## -1 Calculate overall auROC & auPRC 
@@ -506,10 +503,8 @@ def crossboth_aucprc(
     model.load_weights(model_path)
     pred = model.predict(test_ds)
     print('predction shape:', pred.shape)
-    m_crossboth_to1 = m_crossboth.copy()  
-    m_crossboth_to1[m_crossboth_to1 != 0] = 1 
     test_prediction = pred.T
-    true_01matrix = m_crossboth_to1.T.toarray()
+    true_01matrix = (m_crossboth.T.toarray() > 0).astype(int)
 
     ## calculate auc and pr
     ## -1 Calculate overall auROC & auPRC 
@@ -640,14 +635,15 @@ def denoise_nsls(
     ## XChrom impute 
     ad1 = adp.copy()
     ad1 = calc_pca(ad1)
-    ns100,ls100= calc_nsls_score(rna,ad1,100,celltype,use_rep_rna = cellembed_raw,use_rep_atac='X_pca')
-    print(f'neighbor score(100)={ns100:.4f},label score(100)={ls100:.4f}')
+
+    ns10,ls10= calc_nsls_score(rna,ad1,10,celltype,use_rep_rna = cellembed_raw,use_rep_atac='X_pca')
+    print(f'neighbor score(10)={ns10:.4f},label score(10)={ls10:.4f}')
 
     ns50,ls50= calc_nsls_score(rna,ad1,50,celltype,use_rep_rna = cellembed_raw,use_rep_atac='X_pca')
     print(f'neighbor score(50)={ns50:.4f},label score(50)={ls50:.4f}')
 
-    ns10,ls10= calc_nsls_score(rna,ad1,10,celltype,use_rep_rna = cellembed_raw,use_rep_atac='X_pca')
-    print(f'neighbor score(10)={ns10:.4f},label score(10)={ls10:.4f}')
+    ns100,ls100= calc_nsls_score(rna,ad1,100,celltype,use_rep_rna = cellembed_raw,use_rep_atac='X_pca')
+    print(f'neighbor score(100)={ns100:.4f},label score(100)={ls100:.4f}')
 
     if plot_umap:
         import matplotlib.pyplot as plt
@@ -748,10 +744,8 @@ def crosssamples_aucprc(
     model.load_weights(model_path)
     pred = model.predict(ds)
     print('Predict done! prediction shape is:',pred.shape)
-    m_to1 = m.copy()
-    m_to1[m_to1 != 0] = 1
-    true_01matrix = m_to1.T.toarray()
     pred_matrix = pred.T
+    true_01matrix = (m.T.toarray() > 0).astype(int)
 
     ## calculate auc and pr
     ## -1 Calculate overall auROC & auPRC 
@@ -787,6 +781,7 @@ def crosssamples_nsls(
     input_folder:Union[str, Path] = './test_data',
     output_path:Union[str, Path] = './eval_out',
     model_path:Union[str, Path] = './train_out/E1000best_model.h5',
+    cal_preddata:bool = True,
     cellembed_raw:str = 'X_pca_harmony',
     celltype:str = 'cell_type',
     save_pred:bool = False,
@@ -807,6 +802,8 @@ def crosssamples_nsls(
         Path to the output folder.
     model_path: str or Path
         Path to the trained model.
+    cal_preddata: bool
+        Whether to calculate the nsls score based on the predicted data. If False, calculate nsls score based on the raw atac data.
     cellembed_raw: str
         Key of the raw cell input embedding in the cell embedding adata,to calculate RNA neighbors and generate model input.
     celltype: str
@@ -859,32 +856,36 @@ def crosssamples_nsls(
     ad.obs[celltype]=rna.obs[celltype]
     ad.obs['b_zscore'] = np.full(ad.shape[0],1)
     m = sparse.load_npz(f'{input_folder}/m.npz').tocsr()
-
-    gen = Generator(
-        seq_path = input_folder/'all_seqs.h5',
-        adata = ad,
-        cell_input_key = 'zscore32_perpc',
-        m = m,
-    )
-    ds = gen.create_dataset(shuffle=False)
-    embed_dim = rna.obsm[cellembed_raw].shape[1]
-    model = XChrom_model(n_cells=ad.shape[0], cell_vec=embed_dim, show_summary=False)
-    model.load_weights(model_path)
-    pred = model.predict(ds)
-    print('Predict done! prediction shape is:',pred.shape)
     adp = ad.copy()
-    adp.X = pred.transpose(1,0)
-
+    if cal_preddata:
+        if not model_path.exists():
+            raise FileNotFoundError(f"Trained model path {model_path} not found! Run XChrom_train.py first.")
+        gen = Generator(
+            seq_path = input_folder/'all_seqs.h5',
+            adata = ad,
+            cell_input_key = 'zscore32_perpc',
+            m=m
+        )
+        ds = gen.create_dataset(shuffle=False)
+        embed_dim = rna.obsm[cellembed_raw].shape[1]
+        model = XChrom_model(n_cells=ad.shape[0],cell_vec=embed_dim,show_summary=False)
+        model.load_weights(model_path)
+        pred = model.predict(ds)
+        adp.X = pred.transpose(1,0)
+    else:
+        adp.X = ad.X.copy()    
     ad1 = adp.copy()
     ad1 = calc_pca(ad1)
-    ns100,ls100= calc_nsls_score(rna,ad1,100,celltype,use_rep_rna = use_rep_rna,use_rep_atac='X_pca',**kwargs)
-    print(f'neighbor score(100)={ns100:.4f},label score(100)={ls100:.4f}')
+
+    ns10,ls10= calc_nsls_score(rna,ad1,10,celltype,use_rep_rna = use_rep_rna,use_rep_atac='X_pca',**kwargs)
+    print(f'neighbor score(10)={ns10:.4f},label score(10)={ls10:.4f}')
 
     ns50,ls50= calc_nsls_score(rna,ad1,50,celltype,use_rep_rna = use_rep_rna,use_rep_atac='X_pca',**kwargs)
     print(f'neighbor score(50)={ns50:.4f},label score(50)={ls50:.4f}')
 
-    ns10,ls10= calc_nsls_score(rna,ad1,10,celltype,use_rep_rna = use_rep_rna,use_rep_atac='X_pca',**kwargs)
-    print(f'neighbor score(10)={ns10:.4f},label score(10)={ls10:.4f}')
+    ns100,ls100= calc_nsls_score(rna,ad1,100,celltype,use_rep_rna = use_rep_rna,use_rep_atac='X_pca',**kwargs)
+    print(f'neighbor score(100)={ns100:.4f},label score(100)={ls100:.4f}')
+
     if plot_umap:
         import matplotlib.pyplot as plt
         f, ax = plt.subplots(1, 1, figsize=(6, 4))

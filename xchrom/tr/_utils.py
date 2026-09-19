@@ -96,7 +96,7 @@ class Generator:
             raise IOError(f"Error reading sequence file {seq_path}: {str(e)}")
 
     def __call__(self):
-        """Generator function, used by tf.data.Dataset.from_generator"""
+        """Generator function, yields ONLY peak-specific data to prevent memory leak"""
         for i in range(self.data.shape[0]):
             # get sequence data and convert to one-hot encoding
             x1 = self.data[i]
@@ -114,21 +114,11 @@ class Generator:
             y_labels = np.zeros(self.n_cells, dtype='int8')
             y_labels[y_indices] = 1
             
-            yield (x_seq, self.cellembed, self.b), y_labels
+            yield x_seq, y_labels
 
     def create_dataset(self, shuffle=False):
         """
         Create a TensorFlow dataset from the generator.
-        
-        Parameters
-        ----------
-        shuffle : bool, default False
-            Whether to shuffle the dataset
-            
-        Returns
-        -------
-        tf.data.Dataset
-            The configured TensorFlow dataset for training or prediction
         """
         seq_len = self.data.shape[1]
         cell_vec = self.cellembed.shape[1]
@@ -136,9 +126,7 @@ class Generator:
         dataset = tf.data.Dataset.from_generator(
             self,
             output_signature=(
-                (tf.TensorSpec(shape=(seq_len, 4), dtype=tf.float32),
-                 tf.TensorSpec(shape=(self.n_cells, cell_vec), dtype=tf.float32),
-                 tf.TensorSpec(shape=(self.n_cells,), dtype=tf.float32)),
+                tf.TensorSpec(shape=(seq_len, 4), dtype=tf.float32),
                 tf.TensorSpec(shape=(self.n_cells,), dtype=tf.int8)
             )
         )
@@ -146,7 +134,26 @@ class Generator:
         if shuffle:
             dataset = dataset.shuffle(2000, reshuffle_each_iteration=True)
             
-        return dataset.batch(self.batch_size).prefetch(tf.data.AUTOTUNE)
+        dataset = dataset.batch(self.batch_size)
+        
+        cellembed_tf = tf.constant(self.cellembed, dtype=tf.float32)
+        b_tf = tf.constant(self.b, dtype=tf.float32)
+        
+        def attach_global_embeddings(x_seq_batch, y_labels_batch):
+            current_batch_size = tf.shape(x_seq_batch)[0]
+            
+            cellembed_batch = tf.broadcast_to(
+                cellembed_tf, [current_batch_size, self.n_cells, cell_vec]
+            )
+            b_batch = tf.broadcast_to(
+                b_tf, [current_batch_size, self.n_cells]
+            )
+            
+            return (x_seq_batch, cellembed_batch, b_batch), y_labels_batch
+            
+        dataset = dataset.map(attach_global_embeddings, num_parallel_calls=tf.data.AUTOTUNE)
+        
+        return dataset.prefetch(tf.data.AUTOTUNE)
     
     def get_dataset_info(self):
         """

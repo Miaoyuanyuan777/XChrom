@@ -263,67 +263,105 @@ def plot_percell_aucprc(
     plt.show()
     
     
-
 def plot_motif_activity(
     cell_embedding_ad: anndata.AnnData,
     celltype_key: str,
     tf_act_raw: anndata.AnnData,
     motif_name: str,
     save_path: str = None
-    ):
+):
     """
-    Plot the activity of a single motif and celltype on UMAP.
-    
+    Plot cell type and standardized motif activity on UMAP.
+
     Parameters
     ----------
-    cell_embedding_ad: anndata.AnnData
-        Anndata object containing reduced dimension embedding
-    celltype_key: str
-        Key for cell type in cell_embedding_ad.obs
-    tf_act_raw: anndata.AnnData
-        Anndata object containing raw TF activity data
-    motif_name: str
-        Name of the motif to plot
-    save_path: str, optional
-        Path to save the plot
+    cell_embedding_ad : anndata.AnnData
+        AnnData object containing the UMAP embedding.
+    celltype_key : str
+        Key for cell-type labels in cell_embedding_ad.obs.
+    tf_act_raw : anndata.AnnData
+        AnnData object containing raw TF activity
+        (cells × motifs).
+    motif_name : str
+        Name of the motif to plot.
+    save_path : str, optional
+        Path to save the plot.
 
     Returns
     -------
     None
-    
-    Examples
-    --------
-    >>> import xchrom as xc
-    >>> xc.pl.plot_motif_activity(
-        cell_embedding_ad = covid19_rna, 
-        celltype_key = 'celltypeL0', 
-        tf_act_raw = tf_act, 
-        motif_name = 'RUNX3', 
-        save_path = './RUNX3_activity.pdf'
-        )
     """
+
     sc.set_figure_params(frameon=False)
     plt.rcParams['figure.dpi'] = 100
     plt.rcParams['savefig.dpi'] = 100
     plt.rcParams['figure.facecolor'] = 'white'
-    
-    sc.pp.scale(tf_act_raw)
-    ad = tf_act_raw[:, tf_act_raw.var['motif_name'] == motif_name]
-    if ad.shape[1] == 0:
-        raise ValueError(f"Motif '{motif_name}' not found in {tf_act_raw}")
-    cell_embedding_ad.obs[f'{motif_name}_activity'] = ad.X.flatten()
-
+    mask = tf_act_raw.var["motif_name"] == motif_name
+    if mask.sum() == 0:
+        raise ValueError(
+            f"Motif '{motif_name}' not found in "
+            "tf_act_raw.var['motif_name']."
+        )
+    if not np.array_equal(
+        cell_embedding_ad.obs_names,
+        tf_act_raw.obs_names
+    ):
+        raise ValueError(
+            "Cell names or cell order differ between "
+            "cell_embedding_ad and tf_act_raw."
+        )
+    activity = np.asarray(
+        tf_act_raw[:, mask].X
+    ).ravel().copy()
+    if not np.all(np.isfinite(activity)):
+        raise ValueError(
+            f"Motif '{motif_name}' contains NaN or Inf values."
+        )
+    activity_std = activity.std()
+    if activity_std == 0:
+        activity_scaled = np.zeros_like(activity)
+    else:
+        activity_scaled = (
+            activity - activity.mean()
+        ) / activity_std
+    ad_plot = cell_embedding_ad.copy()
+    ad_plot.obs[f"{motif_name}_activity"] = activity_scaled
     fig = plt.figure(figsize=(10, 4))
-    gs = gridspec.GridSpec(1, 2, width_ratios=[1, 1], wspace=0.3)
+    gs = gridspec.GridSpec(
+        1, 2,
+        width_ratios=[1, 1],
+        wspace=0.3
+    )
     ax0 = fig.add_subplot(gs[0, 0])
-    sc.pl.umap(cell_embedding_ad, color=celltype_key, ax=ax0, show=False)
-    ax0.set_title(f'{celltype_key}')
+    sc.pl.umap(
+        ad_plot,
+        color=celltype_key,
+        ax=ax0,
+        show=False
+    )
+    ax0.set_title(celltype_key)
     ax1 = fig.add_subplot(gs[0, 1])
-    sc.pl.umap(cell_embedding_ad, color=f'{motif_name}_activity', ax=ax1, 
-               cmap='coolwarm', vmin=-2, vmax=2, show=False)
-    ax1.set_title(f'{motif_name}_activity')
-    plt.subplots_adjust(left=0.05, right=0.95, top=0.9, bottom=0.1)
+    sc.pl.umap(
+        ad_plot,
+        color=f"{motif_name}_activity",
+        ax=ax1,
+        cmap="coolwarm",
+        vmin=-2,
+        vmax=2,
+        show=False
+    )
+    ax1.set_title(f"{motif_name} activity")
+    plt.subplots_adjust(
+        left=0.05,
+        right=0.95,
+        top=0.9,
+        bottom=0.1
+    )
     if save_path:
-        plt.savefig(save_path, format="pdf", bbox_inches="tight")
+        plt.savefig(
+            save_path,
+            format="pdf",
+            bbox_inches="tight"
+        )
         print(f"Plot saved to: {save_path}")
     plt.show()

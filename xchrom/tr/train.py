@@ -28,9 +28,16 @@ Import as a module:
         )
 """
 
+import tensorflow as tf
+gpus = tf.config.list_physical_devices('GPU')
+if gpus:
+    try:
+        for gpu in gpus:
+            tf.config.experimental.set_memory_growth(gpu, True)
+    except RuntimeError as e:
+        print(e)
 import anndata
 import h5py
-import tensorflow as tf
 import numpy as np
 import scipy.sparse as sparse
 import pickle
@@ -40,6 +47,7 @@ from pathlib import Path
 from typing import Union, Dict, Any, Literal
 from scipy import stats
 import os
+import gc
 try:
     from .._utils import setup_seed
     from ._utils import Generator, XChrom_model, Callback_TrackScore, Callback_SaveModel
@@ -174,6 +182,8 @@ def train_XChrom(
     with h5py.File(input_folder / 'splits.h5', 'r') as hf:
         trainval_cellid = hf['trainval_cell'][:]
         rna_trainval = rna_ad[trainval_cellid, :]
+    del rna_ad
+    gc.collect()
     trainval_seq = str(input_folder / 'trainval_seqs.h5')
     ad_trainval = anndata.read_h5ad(input_folder / 'ad_trainval.h5ad')
     m_trainval = sparse.load_npz(input_folder / 'm_trainval.npz').tocsr()
@@ -198,6 +208,8 @@ def train_XChrom(
     m_train = m_trainval[train_id, :]
     m_val = m_trainval[val_id, :]
     train_cell = ad_train.shape[0]
+    del m_trainval
+    gc.collect()
     
     # 4. Create TensorFlow dataset
     print("4. Create TensorFlow dataset...")
@@ -264,6 +276,9 @@ def train_XChrom(
             Callback_TrackScore(rna_trainval, ad_trainval, model, print_scores=print_scores, 
                                use_rep_rna=cellembed_raw, label=celltype, cell_input_key='zscore32_perpc')
         )
+    else:
+        del ad_trainval,rna_trainval
+        gc.collect()
     
     # 7. Start training
     print("7. Start training...")
