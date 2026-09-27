@@ -109,7 +109,7 @@ xc.pl.plot_train_history(
     )
 ```
 
-## **Acknowledgements **
+## **Acknowledgements**
 
 The genomic sequence encoding module of XChrom was inspired by the CNN-based architecture of scBasset. XChrom extends this framework by incorporating scRNA-seq-derived cell-state representations to enable prediction across both cells and genomic regions. We gratefully acknowledge the foundational contribution of scBasset to the development of XChrom.
 
