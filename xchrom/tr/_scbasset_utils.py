@@ -1,4 +1,22 @@
-## function for scBasset model
+"""
+Sequence-model utility functions used by XChrom.
+
+Portions of this file were adapted from the scBasset implementation,
+including utilities for sequence augmentation and CNN construction.
+
+Source:
+    scBasset
+    https://github.com/calico/scBasset
+    Original implementation: scbasset/basenji_utils.py
+
+scBasset is distributed under the Apache License 2.0.
+The adapted code in this file has been modified for integration into the XChrom architecture.
+
+Reference:
+    H. Yuan, and D. R. Kelley, “scBasset: Sequence-Based Modeling of Single-Cell ATAC-Seq Using Convolutional Neural Networks,” 
+    Nature Methods 19, no. 9 (2022): 1088–1096, https://doi.org/10.1038/s41592-022-01562-8.
+"""
+
 import tensorflow as tf
 import numpy as np
 

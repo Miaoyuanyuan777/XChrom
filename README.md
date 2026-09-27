@@ -108,3 +108,10 @@ xc.pl.plot_train_history(
     out_file = './data/quick_start/train_out/train_history_plot.pdf'
     )
 ```
+
+## **Acknowledgements **
+
+The genomic sequence encoding module of XChrom was inspired by the CNN-based architecture of scBasset. XChrom extends this framework by incorporating scRNA-seq-derived cell-state representations to enable prediction across both cells and genomic regions. We gratefully acknowledge the foundational contribution of scBasset to the development of XChrom.
+
+scBasset:
+H. Yuan, and D. R. Kelley, “scBasset: Sequence-Based Modeling of Single-Cell ATAC-Seq Using Convolutional Neural Networks,” *Nature Methods* *19*, no. 9 (2022): 1088–1096, https://doi.org/10.1038/s41592-022-01562-8.
