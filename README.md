@@ -109,9 +109,15 @@ xc.pl.plot_train_history(
     )
 ```
 
+## **Citation**
+
+XChrom:
+Y. Miao, X. Liang, W. Zhang, D. Han, Y. Li, and Z. Wang, "XChrom: a cross-cell chromatin accessibility prediction model integrating genomic sequence and cellular context", bioRxiv 2025, https://doi.org/10.1101/2025.11.18.689149.
+
+
 ## **Acknowledgements**
 
 The genomic sequence encoding module of XChrom was inspired by the CNN-based architecture of scBasset. XChrom extends this framework by incorporating scRNA-seq-derived cell-state representations to enable prediction across both cells and genomic regions. We gratefully acknowledge the foundational contribution of scBasset to the development of XChrom.
 
 scBasset:
-H. Yuan, and D. R. Kelley, “scBasset: Sequence-Based Modeling of Single-Cell ATAC-Seq Using Convolutional Neural Networks,” *Nature Methods* *19*, no. 9 (2022): 1088–1096, https://doi.org/10.1038/s41592-022-01562-8.
+H. Yuan, and D. R. Kelley, "scBasset: Sequence-Based Modeling of Single-Cell ATAC-Seq Using Convolutional Neural Networks", *Nature Methods* *19*, no. 9 (2022): 1088–1096, https://doi.org/10.1038/s41592-022-01562-8.

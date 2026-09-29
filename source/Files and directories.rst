@@ -166,6 +166,27 @@ Files and directories
     │       ├── epoch_model
     │       ├── history.pickle
     │       └── train_history_plot.pdf
+    ├── 5_pretrained_xchrom
+    │   ├── training_rna.h5ad
+    │   ├── training_atac.h5ad
+    │   ├── h_pbmc_RNA.h5ad
+    │   ├── E1000best_model.h5
+    │   ├── trainval_seqs.h5
+    │   ├── peaks.bed    
+    │   ├── Homo_sapiens.meme
+    │   ├── predicted_accessibility.h5ad
+    │   ├── tf_activity.h5ad
+    │   ├── CEBPB_activity.pdf
+    │   ├── PAX5_activity.pdf
+    │   └──  motif_fasta
+    │       ├── ref_peaks1000.fasta
+    │       ├── shuffled_peaks.fasta
+    │       ├── shuffled_peaks.h5
+    │       └── shuffled_peaks_motifs
+    │           ├── CEBPB.fasta
+    │           ├── CEBPB.h5
+    │           ├── PAX5.fasta
+    │           └── PAX5.h5 
     └── quick_start
         ├── train_data
         │   ├── ad_crosscell.h5ad
