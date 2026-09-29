@@ -5,7 +5,7 @@ Tutorials
 Examples data
 -------------
 
-Some processed files have been uploaded to Zenodo (DOI: https://doi.org/10.5281/zenodo.16959682) for direct use.
+Some processed files have been uploaded to Zenodo (DOI: https://doi.org/10.5281/zenodo.16959681) for direct use.
 Others can be obtained via the download links provided in this tutorial.
 
 Major tutorials
